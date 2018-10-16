@@ -1,0 +1,1 @@
+This is a chess game  made with ruby, made to be played in a command-line-interface

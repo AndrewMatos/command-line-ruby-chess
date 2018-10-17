@@ -4,7 +4,7 @@ class Board
       @table=[[],[],[],[],[],[],[],[]]
       @table.each do |element|
       	 i = 0 
-      	 while i<=6 do
+      	 while i<=7 do
       	 	element.push(" ")
       	 	i+=1
       	 end
@@ -56,7 +56,7 @@ class Board
 
 	def put_board
 		system "clear" or system "cls"
-		i = 6
+		i = 7
 		n = false
 		while i>=0 do
 		  if n == false
@@ -72,6 +72,6 @@ class Board
 
 end
 
-#b=Board.new
+b=Board.new
 
-#b.put_board
+b.put_board

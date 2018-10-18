@@ -55,7 +55,7 @@ class Board
     end
 
 	def put_board
-		system "clear" or system "cls"
+		#system "clear" or system "cls"
 		i = 7
 		n = false
 		while i>=0 do
@@ -67,11 +67,12 @@ class Board
 		    n = false 
 		  end
 	    i-=1
-	    end
+	  end
+  return ""
 	end
 
 end
 
-b=Board.new
+#b=Board.new
 
-b.put_board
+#b.put_board

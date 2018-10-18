@@ -1,46 +1,59 @@
 require "./class_Graph"
 
 class Piece 
-    
+
 	attr_accessor :pos, :table
 
 	def initialize(pos=[0,0])
-		#pos = [X,Y]
+		#[X,Y]
+        #pos = [X,Y]
         @pos=pos
         @table=ntable
 	end
 
-    def move
+    def posible_moves(vertice,arr=[],arren=[])
+        start = vertice.name
+        if start[1] + 1 <=7
+            n = [@pos[0],start[1] + 1]
+            if !arr.include?(n)
+             @table.add_edge(start, n, 1 )
+            end
+        end
+        return vertice
+    end
+
+    def move(arr=[],arren=[])
         ind = @table.find_vertice(@pos)
-        vertice = posible_moves(@table.vertices[ind])
+        vertice = posible_moves(@table.vertices[ind],arr,arren)
         m = []
         vertice.neighbours.each do |element|
             if element
              m.push(element)
             end
         end
+
         m= m.map do |element|
-            case element[1]
+            case element[0]
             when 0
-                element[1]="A"
+                element[0]="A"
              when 1
-                element[1]="B"
+                element[0]="B"
              when 2
-                element[1]="C"
+                element[0]="C"
              when 3
-                element[1]="D"
+                element[0]="D"
              when 4
-                element[1]="E"
+                element[0]="E"
              when 5
-                element[1]="F"
+                element[0]="F"
              when 6
-                element[1]="G"
+                element[0]="G"
              when 7
-                element[1]="H"
+                element[0]="H"
              end
-        element  = element[1]+element[0].to_s
+        element  = element[0]+element[1].to_s
         end
-        
+        @table=ntable   
         pos_choice(m)
 
     end
@@ -49,8 +62,8 @@ class Piece
        puts "you can move this piece to to #{m} where do you want to move?"
        choice = gets.chomp.upcase 
        if m.include?(choice)
-       choice = choice.split("").reverse
-       @pos =[choice[0].to_i,to_pos(choice[1])]
+       choice = choice.split("")
+       @pos =[to_pos(choice[0]),choice[1].to_i,]
        else
         puts "invalid, try again"
         pos_choice(m)
@@ -80,9 +93,6 @@ class Piece
        return r   
     end
 
-    def posible_moves(vertice)
-
-    end
 
     def ntable
      n =Graph.new
@@ -90,7 +100,7 @@ class Piece
          while i<=7
          j = 0
             while j<=7
-                n.add_vertex([i,j])
+                n.add_vertex([j,i])
                 j+=1
             end
          i+=1
@@ -105,7 +115,7 @@ class Piece
     end
  
 
-    def moves_route(start, move)
+    def moves_route( move, start=@pos)
 
      connection
      fin = false
@@ -149,6 +159,7 @@ class Piece
       end
     end
     path.reverse!
+    @table=ntable
     puts "you can go there in #{path.length} steps:"
     p path
      

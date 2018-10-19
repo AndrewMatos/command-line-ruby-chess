@@ -14,10 +14,13 @@ class Rook < Piece
         	if start[0] + i <=7
         		n = [start[0] + i,@pos[1]]
         		if arr.include?(n)
-        		break
-        		else
-        	    @table.add_edge(start, n, 1 )
-        	    end
+                break
+                elsif arren.include?(n)
+                @table.add_edge(start, n, 1 )
+                break
+                else
+                @table.add_edge(start, n, 1 )
+                end
         	else 
             up = true
         	end 
@@ -30,10 +33,13 @@ class Rook < Piece
         	if start[1] + i <=7
         		n = [@pos[0],start[1] + i]
         	    if arr.include?(n)
-        		break
-        		else
-        	    @table.add_edge(start, n, 1 )
-        	    end
+                break
+                elsif arren.include?(n)
+                @table.add_edge(start, n, 1 )
+                break
+                else
+                @table.add_edge(start, n, 1 )
+                end
         	else 
             right = true
         	end 
@@ -46,10 +52,13 @@ class Rook < Piece
         	if start[0] - i >=0
         		n = [start[0] - i, @pos[1]]
         	    if arr.include?(n)
-        		break
-        		else
-        	    @table.add_edge(start, n, 1 )
-        	    end
+                break
+                elsif arren.include?(n)
+                @table.add_edge(start, n, 1 )
+                break
+                else
+                @table.add_edge(start, n, 1 )
+                end
         	else 
             down = true
         	end 
@@ -62,10 +71,13 @@ class Rook < Piece
         		if start[1] - i >= 0
         		n = [@pos[0],start[1] - i]
         	    if arr.include?(n)
-        		break
-        		else
-        	    @table.add_edge(start, n, 1 )
-        	    end
+                break
+                elsif arren.include?(n)
+                @table.add_edge(start, n, 1 )
+                break
+                else
+                @table.add_edge(start, n, 1 )
+                end
         	else 
             left = true
         	end 
@@ -83,4 +95,4 @@ end
 
 #r=Rook.new
 
-#r.move([[2,0]])
+#r.move

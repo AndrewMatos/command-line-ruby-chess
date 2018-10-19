@@ -9,15 +9,17 @@ class Piece
         #pos = [X,Y]
         @pos=pos
         @table=ntable
+        
 	end
+
+  
+
 
     def posible_moves(vertice,arr=[],arren=[])
         start = vertice.name
         if start[1] + 1 <=7
             n = [@pos[0],start[1] + 1]
-            if !arr.include?(n)
-             @table.add_edge(start, n, 1 )
-            end
+            can_move(n)
         end
         return vertice
     end

@@ -2,14 +2,14 @@ require "./class_Graph"
 
 class Piece 
 
-	attr_accessor :pos, :table
+	attr_accessor :pos, :table, :symbol
 
-	def initialize(pos=[0,0])
+	def initialize(pos=[0,0],symbol)
 		#[X,Y]
         #pos = [X,Y]
         @pos=pos
         @table=ntable
-        
+        @symbol=symbol
 	end
 
   
@@ -55,21 +55,24 @@ class Piece
              end
         element  = element[0]+element[1].to_s
         end
-        @table=ntable   
+        @table=ntable 
+        if m.length ==0 
+         puts " sorry, there not moves avaible for this piece"
+        else 
         pos_choice(m)
-
+        end
     end
 
     def pos_choice(m)
        puts "you can move this piece to to #{m} where do you want to move?"
        choice = gets.chomp.upcase 
-       if m.include?(choice)
-       choice = choice.split("")
-       @pos =[to_pos(choice[0]),choice[1].to_i,]
-       else
-        puts "invalid, try again"
-        pos_choice(m)
-       end 
+        if m.include?(choice)
+           choice = choice.split("")
+           @pos =[to_pos(choice[0]),choice[1].to_i,]
+           else
+            puts "invalid, try again"
+            pos_choice(m)
+        end 
     end
     
     def to_pos(str)

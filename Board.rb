@@ -6,7 +6,7 @@ require "./Rook"
 require "./Knight"
 
 class Board
-    attr_accessor :table, :whites, :blacks , :wpos , :bpos , :bs, :wking , :bking
+    attr_accessor :table, :whites, :blacks , :wpos , :bpos , :bs, :wking , :bking , :wthreat , :bhreat
 	def initialize
       @table=[[],[],[],[],[],[],[],[]]
       @bs = Blankspace.new
@@ -23,6 +23,8 @@ class Board
       @bpos=[]
       @wking=""
       @bking=""
+      @wthreat=""
+      @bhreat=""
       put_white
       put_black
 	end
@@ -149,8 +151,8 @@ class Board
     end
 
 	def put_board
-		system "clear" or system "cls"
-    system "clear" or system "cls"
+		#system "clear" or system "cls"
+    #system "clear" or system "cls"
 		i = 7
 		n = false
 		while i>=0 do

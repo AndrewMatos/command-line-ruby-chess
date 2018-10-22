@@ -3,7 +3,7 @@ require "./Piece"
 class Knight < Piece
 	
 
-    def posible_moves(vertice, arr,arren)
+    def posible_moves(vertice, arr,arren, white=false,king_test=false)
 
         start= vertice.name
 

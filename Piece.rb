@@ -4,7 +4,7 @@ class Piece
 
 	attr_accessor :pos, :table, :symbol
 
-	def initialize(pos=[0,0],symbol)
+	def initialize(pos=[0,0],symbol ="")
 		#[X,Y]
         #pos = [X,Y]
         @pos=pos
@@ -15,7 +15,7 @@ class Piece
   
 
 
-    def posible_moves(vertice,arr=[],arren=[])
+    def posible_moves(vertice,arr=[],arren=[],white=false,king_test=false)
         start = vertice.name
         if start[1] + 1 <=7
             n = [@pos[0],start[1] + 1]
@@ -24,42 +24,50 @@ class Piece
         return vertice
     end
 
-    def move(arr=[],arren=[])
+    def string_pos(pos=@pos)
+        spos = pos.dup
+       case spos[0]
+            when 0
+                spos[0]="A"
+             when 1
+                spos[0]="B"
+             when 2
+                spos[0]="C"
+             when 3
+                spos[0]="D"
+             when 4
+                spos[0]="E"
+             when 5
+                spos[0]="F"
+             when 6
+                spos[0]="G"
+             when 7
+                spos[0]="H"
+             end
+       return spos[0]+spos[1].to_s
+    end
+
+    def move(arr=[],arren=[], white=false )
+        
         ind = @table.find_vertice(@pos)
-        vertice = posible_moves(@table.vertices[ind],arr,arren)
+        vertice = posible_moves(@table.vertices[ind],arr,arren,white)
         m = []
         vertice.neighbours.each do |element|
             if element
              m.push(element)
             end
         end
-
         m= m.map do |element|
-            case element[0]
-            when 0
-                element[0]="A"
-             when 1
-                element[0]="B"
-             when 2
-                element[0]="C"
-             when 3
-                element[0]="D"
-             when 4
-                element[0]="E"
-             when 5
-                element[0]="F"
-             when 6
-                element[0]="G"
-             when 7
-                element[0]="H"
-             end
-        element  = element[0]+element[1].to_s
+            element = string_pos(element)
         end
         @table=ntable 
         if m.length ==0 
-         puts " sorry, there not moves avaible for this piece"
+         puts " sorry, there not moves avaible for this piece , press start to choose another piece"
+         gets
+         return false
         else 
         pos_choice(m)
+        return true
         end
     end
 
@@ -68,7 +76,7 @@ class Piece
        choice = gets.chomp.upcase 
         if m.include?(choice)
            choice = choice.split("")
-           @pos =[to_pos(choice[0]),choice[1].to_i,]
+           @pos =[to_pos(choice[0]),choice[1].to_i]
            else
             puts "invalid, try again"
             pos_choice(m)

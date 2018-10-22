@@ -4,8 +4,7 @@ class Vertex
 	def initialize(name)
 		@name= name
 		@neighbours=[]		
-		@weight=[]
-		
+		@weight=[]	
 	end
 
 end

@@ -1,8 +1,9 @@
 require "./Piece"
 
-class King < Piece 
+class King < Piece
 
-	def posible_moves(vertice,arr,arren)
+
+	def posible_moves(vertice,arr,arren, white=false)
         #pos = [X,Y]
 	 	start = vertice.name 
         i = 1
@@ -76,3 +77,5 @@ end
 #k = King.new
 
 #k.move
+
+#p k.string_pos

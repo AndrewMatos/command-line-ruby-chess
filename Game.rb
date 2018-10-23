@@ -15,8 +15,9 @@ class Game
     until @win do
      
      white_play
-     
+     check_promotion(true)
      black_play
+     check_promotion(false)
     end
      @board.put_board
      puts "Bye"
@@ -86,10 +87,7 @@ class Game
               
             
               if vertice.neighbours.include?(king)                 	 
-              	#p "#{element.pos}:#{element.class}"
-              	#p @board.bpos
-              	#p king
-              	#p vertice.neighbours
+            
               	n = true            
                  @wks +=1                 
               end
@@ -104,12 +102,9 @@ class Game
 
             
               if vertice.neighbours.include?(king)
-                 # p "#{element.pos}:#{element.class}"
-                 #p @board.wpos
-                 # p king
-                 # p vertice.neighbours
+            
               	  n = true
-              	 # element.table=element.ntable
+              	 
               	  @bks +=1            
               end
     		end
@@ -194,7 +189,6 @@ class Game
 			       	 ind = element.table.find_vertice(element.pos)
 			         if element.table.vertices[ind].neighbours.include?(@board.wking.pos)
 			         ind2 = piece.table.find_vertice(piece.pos)
-			         # p_m = piece.posible_moves(piece.table.vertices[ind2],@board.wpos,@board.bpos,white)
 			     
 			          m = piece.table.vertices[ind2].neighbours.map do |element2|
 
@@ -222,7 +216,6 @@ class Game
 
 		          if element.table.vertices[ind].neighbours.include?(@board.bking.pos)
 			        ind2 = piece.table.find_vertice(piece.pos)
-			       # p_m = piece.posible_moves(piece.table.vertices[ind2],@board.bpos,@board.wpos,white)
 			      
 			           m = piece.table.vertices[ind2].neighbours.map do |element2|
 
@@ -398,21 +391,17 @@ class Game
 
    end
 
-   
-
-
-
    def eats(eaten,white = false)
 	  if white 
 	  	index1 = @board.blacks.index(eaten)
 	  	index2 = @board.bpos.index(eaten.pos)
 	    @board.blacks=@board.blacks[0...index1]+@board.blacks[index1+1..-1]
-	    @board.bpos=@board.bpos[0...index1]+@board.bpos[index1+1..-1]
+	    @board.bpos=@board.bpos[0...index2]+@board.bpos[index2+1..-1]
 	  else
 	  	index1 = @board.whites.index(eaten)
 	  	index2 = @board.wpos.index(eaten.pos)
 	    @board.whites=@board.whites[0...index1]+@board.whites[index1+1..-1]
-	    @board.wpos=@board.wpos[0...index1]+@board.wpos[index1+1..-1]
+	    @board.wpos=@board.wpos[0...index2]+@board.wpos[index2+1..-1]
 	  end
    end
 
@@ -438,7 +427,72 @@ class Game
         end 
        return r   
     end
+    
+    def check_promotion(white)
+    	if white
+    		@board.whites.each_with_index do |element,ind|
+    			if element.class == Pawn
+                    if element.pos[1]==7
+                    	promotion(element,ind,white)
+                    end
+    			end
+    		end
+    	else
+    		@board.blacks.each_with_index do |element,ind|
+    			if element.class == Pawn
+                    if element.pos[1]==0
+                    	promotion(element,ind,white)
+                    end
+    			end
+    		end
+    	end
+    end
 
+    def promotion(element, ind,white)
+        array = ["queen","rook","bishop","kinght"]
+        puts "which piece youn want to change your pawn:"
+        p array
+        choice = gets.chomp.downcase
+        if array.include?(choice)
+        if white
+	        index1 = ind
+		  	index2 = @board.wpos.index(element.pos)
+		    @board.whites=@board.whites[0...index1]+@board.whites[index1+1..-1]
+		    @board.wpos=@board.wpos[0...index2]+@board.wpos[index2+1..-1]
+		    case choice
+		    when "queen"
+		     n = Queen.new(element.pos,"\u2655")
+		    when "rook"
+		     n = Rook.new(element.pos,"\u2656")
+		    when "bishop"
+		     n = Bishop.new(element.pos, "\u2657")
+		    when "kinght"
+             n = Kinght.new(element.pos, "\u2658")
+		    end
+		    @board.put_piece(n,true)
+		else
+			index1 = ind
+	  	    index2 = @board.bpos.index(element.pos)
+	        @board.blacks=@board.blacks[0...index1]+@board.blacks[index1+1..-1]
+	        @board.bpos=@board.bpos[0...index2]+@board.bpos[index2+1..-1]
+	        case choice
+		    when "queen"
+		     n = Queen.new(element.pos,"\u265B")
+		    when "rook"
+		     n = Rook.new(element.pos,"\u265C")
+		    when "bishop"
+		     n = Bishop.new(element.pos, "\u265D")
+		    when "kinght"
+             n = Kinght.new(element.pos, "\u265E")
+		    end
+		    @board.put_piece(n)
+        end
+        else
+        puts "invalid choice try again"
+        gets
+        promotion(element,index)
+        end
+    end
 
 end
 

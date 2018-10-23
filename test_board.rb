@@ -14,6 +14,8 @@ class Tboard < Board
 
 =end
 
+     n = Pawn.new([2,6],"\u2659")
+     put_piece(n,true)
      n = Rook.new([0,0],"\u2656")
      put_piece(n,true)
      n = Rook.new([7,0],"\u2656")
@@ -43,6 +45,8 @@ class Tboard < Board
      i+=1
      end
 =end
+     n = Pawn.new([5,1],"\u265F")
+     put_piece(n,false)
      n = Rook.new([0,7],"\u265C")
      put_piece(n)
 =begin

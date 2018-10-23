@@ -2,124 +2,308 @@ require "./test_board"
 
 class Game
 
-	attr_accessor :board
+	attr_accessor :board, :wks , :bks, :win
 
 	def initialize
 		@board = Tboard.new
+		@wks=0
+		@bks=0
+		@win = false
 	end
    
     def play
-    until win do
+    until @win do
      
      white_play
+     
      black_play
     end
      @board.put_board
+     puts "Bye"
     end
 
     def white_play
 	    @board.put_board
 	    if check(@board.wking.pos,true)
-     	puts "white king is in check!!!"
-        end
-	   	puts "your turn WHITE player, choose wich piece to move , write the number of the piece you can move (write 'skip' to skip turn): "
-	    avaible_pieces(true)
-	    begin 
-	    choice=gets.chomp.upcase 
-		    if choice != "SKIP"
-		     move_piece(choice,true)
-		    end
-		rescue TypeError
-			puts "there is not piece with that name , press start to try again"
-			gets
-			white_play
+     	puts "your turn WHITE player, white king is in check!!!"
+     	play_in_check(true)
+        else
+		   	puts "your turn WHITE player, choose wich piece to move , write the number of the piece you can move (write 'skip' to skip turn): "
+		    avaible_pieces(@board.whites,true)
+		    
+		    choice=gets.chomp.upcase 
+			   if choice != "SKIP" && choice !=""
+			     begin
+			     move_piece(choice,true)
+			     rescue TypeError
+				 puts "there is not piece  in that place, press start to try again"
+				 gets
+				 white_play
+			     end
+			   
+			 
+			   end
+			
 		end
     end
 
     def black_play
 	    @board.put_board
 	     if check(@board.bking.pos,false)
-         puts "black king is in check!!!"
-         end
-	    puts "your turn BLACK player, choose wich piece to move , write the number of the piece you can move (write 'skip' to skip turn): "
-	    avaible_pieces(false)
-	    begin
-	    choice=gets.chomp.upcase 
-	     if choice != "SKIP"
-		     move_piece(choice,false)
-		 end
-		rescue TypeError
-			puts "there is not piece with that name , press start to try again"
-			gets
-			black_play
+         puts "Your turn BLACK player, black king is in check!!!"
+         play_in_check(false)
+         else
+		 puts "your turn BLACK player, choose wich piece to move , write the number of the piece you can move (write 'skip' to skip turn): "
+		    avaible_pieces(@board.blacks,false)
+		    
+		    choice=gets.chomp.upcase 
+		     if choice != "SKIP" && choice !=""
+		     	 begin
+			     move_piece(choice,false)
+			     rescue TypeError
+				 puts "there is not piece  in that place, press start to try again"
+				 gets
+				 black_play
+			     end
+			 end
+			
 		end
     end
 
     def check(king,white = false,king_test=false)
     n = false
+    @wks=0
+    @bks=0
+    
     	if white
+    		
     		@board.blacks.each do |element|
+    		  element.table=element.ntable
               ind = element.table.find_vertice(element.pos)
-              vertice = element.posible_moves(element.table.vertices[ind],@board.bpos,@board.wpos,white)
+            
+              
+              vertice = element.posible_moves(element.table.vertices[ind],@board.bpos,@board.wpos,white,king_test)
+              
+            
               if vertice.neighbours.include?(king)                 	 
               	#p "#{element.pos}:#{element.class}"
-              	n = true
-              	element.table=element.ntable
-              	break
+              	#p @board.bpos
+              	#p king
+              	#p vertice.neighbours
+              	n = true            
+                 @wks +=1                 
               end
     		end
     	else
+
     		@board.whites.each do |element|
+    		  element.table=element.ntable
               ind = element.table.find_vertice(element.pos)
-              vertice = element.posible_moves(element.table.vertices[ind],@board.wpos,@board.bpos,white)
+             
+              vertice = element.posible_moves(element.table.vertices[ind],@board.wpos,@board.bpos,white,king_test) 
+
+            
               if vertice.neighbours.include?(king)
-                #  p "#{element.pos}:#{element.class}"
+                 # p "#{element.pos}:#{element.class}"
+                 #p @board.wpos
+                 # p king
+                 # p vertice.neighbours
               	  n = true
-              	  element.table=element.ntable
-              	  break
-              	 
+              	 # element.table=element.ntable
+              	  @bks +=1            
               end
     		end
     	end
-    return n	
+    return n
     end
 
-    def win
-    	return false
+    
+
+    def play_in_check(white=false)
+    	if white
+	    	n = @wks
+	    else
+	        n = @bks
+	    end
+	    if n <2 
+	         can_move =[]
+	         if white
+	         	@board.whites.each do |element|	
+	         	   if element.class != King       	 
+			            if save_king(element,white)
+			            	can_move.push(element)
+			            end
+		           end 
+	         	end
+	         	 can_move.push(@board.wking)
+	         	 puts "you can move only:"
+	         	 avaible_pieces(can_move,true)
+                 choice=gets.chomp.upcase 
+                 if choice ==""
+                 puts "there is not piece  in that place, press start to try again"
+				 gets
+				 white_play
+                 end 
+	         	 begin
+			     move_piece(choice,white,true)
+			     rescue TypeError 
+				 puts "there is not piece  in that place, press start to try again"
+				 gets
+				 white_play
+			     end
+	         else
+	         	@board.blacks.each do |element|                
+		             if element.class != King       	 
+			            if save_king(element,white)
+			            	can_move.push(element)
+			            end
+		             end 
+	         	end
+	         	can_move.push(@board.bking)
+	         	puts "you can move only:"
+	         	avaible_pieces(can_move,false)
+			     choice=gets.chomp.upcase 
+			     if choice ==""
+                 puts "there is not piece  in that place, press start to try again"
+				 gets
+				 white_play
+                 end 
+	         	 begin
+			     move_piece(choice,white,true)
+			     rescue TypeError
+				 puts "there is not piece  in that place, press start to try again"
+				 gets
+				 black_play
+			     end
+
+	         end
+        else 
+           checkmate
+        end
+        
+       
     end
 
-    def checkmate
-    	puts "CHECKMATE MOTHERFUCKER!"
+    def save_king(piece, white)
+       
+	      if white
+		      	kind =  @board.wking.table.find_vertice(@board.wking.pos)
+		        @board.wking.posible_moves(@board.wking.table.vertices[kind],@board.wpos,@board.bpos,white)
+		       
+		       @board.blacks.each do |element|
+			       	 ind = element.table.find_vertice(element.pos)
+			         if element.table.vertices[ind].neighbours.include?(@board.wking.pos)
+			         ind2 = piece.table.find_vertice(piece.pos)
+			         # p_m = piece.posible_moves(piece.table.vertices[ind2],@board.wpos,@board.bpos,white)
+			     
+			          m = piece.table.vertices[ind2].neighbours.map do |element2|
+
+			              if element.table.vertices[ind].neighbours.include?(element2) &&  @board.wking.table.vertices[kind].neighbours.include?(element2)
+
+			              element2 = element2
+			              elsif element2 == element.pos
+			               element2 = element2
+			              else
+			               element2 = nil
+			              end
+
+			           end
+			          
+			           piece.table.vertices[ind2].neighbours = m
+			       end
+		      end
+
+	      else
+	           kind = @board.bking.table.find_vertice(@board.bking.pos) 
+	           @board.bking.posible_moves( @board.bking.table.vertices[kind],@board.bpos,@board.wpos,white)
+
+	           @board.whites.each do |element|
+	               ind = element.table.find_vertice(element.pos)
+
+		          if element.table.vertices[ind].neighbours.include?(@board.bking.pos)
+			        ind2 = piece.table.find_vertice(piece.pos)
+			       # p_m = piece.posible_moves(piece.table.vertices[ind2],@board.bpos,@board.wpos,white)
+			      
+			           m = piece.table.vertices[ind2].neighbours.map do |element2|
+
+			              if element.table.vertices[ind].neighbours.include?(element2) &&  @board.bking.table.vertices[kind].neighbours.include?(element2)
+
+			              element2 = element2
+			              elsif element2 == element.pos
+			               element2 = element2
+			              else
+			               element2 = nil
+			              end
+
+			           end
+			         
+			           piece.table.vertices[ind2].neighbours = m
+			        end
+	            end
+	      end
+          ind2 = piece.table.find_vertice(piece.pos)
+	      if piece.table.vertices[ind2].neighbours.all? {|element| element == nil}
+	      return false
+	      else
+	      return true
+	      end
+
     end
 
-   def avaible_pieces(white=false)
+    
+
+    def checkmate(white = false)
+    	puts "CHECKMATE!"
+    	if white
+    	puts "player Black Wins , press start to quit, or enter 'rematch'  to play again"
+    	choice = gets.chomp
+	    	if choice == "rematch"
+	    	g2 = Game.new
+	    	g2.play
+	    	else
+	    	@win = true
+	    	end
+    	else
+    	puts "player White Wins, press start to quit, or enter 'rematch'  to play again"
+    	choice = gets.chomp
+    	    if choice == "rematch"
+	    	g2 = Game.new
+	    	g2.play
+	    	else
+	    	@win = true
+	    	end
+    	end
+    end
+
+   def avaible_pieces(pieces,white=false)
    	 str=""
    	 if white
-	   	 @board.whites.each do |element|
+	   	 pieces.each do |element|
 	   	 	str+="#{element.string_pos}:#{element.class}  "
 	   	 end
 
    	 else 
-	   	  @board.blacks.each do |element|
+	   	  pieces.each do |element|
 	   	 	str+="#{element.string_pos}:#{element.class}  "
 	   	 end
    	 end
    	 puts str + "\n"
    end
 
-   def move_piece(choice, white = false)
+   def move_piece(choice, white = false,incheck = false)
 	   	choice = [to_pos(choice[0]),choice[1].to_i]
         if @board.table[choice[0]][choice[1]].class == King
          move_king(@board.table[choice[0]][choice[1]],white) 
         else 
-		 pos_change(choice,white)
+		 pos_change(choice,white,false,incheck)
 		end
    end
 
-   def  pos_change(choice,white,king=false)
+   def  pos_change(choice,white,king=false,incheck=false)
          	if white
-	            
-				   if king || @board.table[choice[0]][choice[1]].move(@board.wpos,@board.bpos,true)
+     
+	            if @board.whites.include?(@board.table[choice[0]][choice[1]])
+				   if king || @board.table[choice[0]][choice[1]].move(@board.wpos,@board.bpos,true,incheck)
 					   	if @board.blacks.include?(@board.table[@board.table[choice[0]][choice[1]].pos[0]][@board.table[choice[0]][choice[1]].pos[1]])
 					   
 					   	eats(@board.table[@board.table[choice[0]][choice[1]].pos[0]][@board.table[choice[0]][choice[1]].pos[1]] , white)
@@ -128,9 +312,14 @@ class Game
 					else 
 				    white_play 
 					end 
+				else 
+                 puts "there is not piece  in that place, press start to try again"
+				 gets
+				 white_play
+				end
 			else 
-				
-				if king || @board.table[choice[0]][choice[1]].move(@board.bpos,@board.wpos,false)
+			  if @board.blacks.include?(@board.table[choice[0]][choice[1]])
+				if king || @board.table[choice[0]][choice[1]].move(@board.bpos,@board.wpos,false,incheck)
 				   	if @board.whites.include?(@board.table[@board.table[choice[0]][choice[1]].pos[0]][@board.table[choice[0]][choice[1]].pos[1]])
 				   	eats(@board.table[@board.table[choice[0]][choice[1]].pos[0]][@board.table[choice[0]][choice[1]].pos[1]] , white)
 				   	end
@@ -138,8 +327,14 @@ class Game
 				else 
 				black_play
 				end
+			  else
+			  puts "there is not piece  in that place, press start to try again"
+			  gets
+			  white_play
+			  end
             end
    end
+
 
    def normal_move(choice,white = false)
    	  @board.table[@board.table[choice[0]][choice[1]].pos[0]][@board.table[choice[0]][choice[1]].pos[1]] = @board.table[choice[0]][choice[1]] 
@@ -181,9 +376,9 @@ class Game
       end
 
 	  if white && blocked_m == posible_m && check(@board.wking.pos,true)
-	  	checkmate
+	  	checkmate(white)
 	  elsif  blocked_m == posible_m && check(@board.bking.pos,false)
-	  	checkmate
+	  	checkmate(white)
 	  else
 
 	  	if final_m.length ==0 

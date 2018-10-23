@@ -16,12 +16,7 @@ class Piece
 
 
     def posible_moves(vertice,arr=[],arren=[],white=false,king_test=false)
-        start = vertice.name
-        if start[1] + 1 <=7
-            n = [@pos[0],start[1] + 1]
-            can_move(n)
-        end
-        return vertice
+        
     end
 
     def string_pos(pos=@pos)
@@ -47,10 +42,14 @@ class Piece
        return spos[0]+spos[1].to_s
     end
 
-    def move(arr=[],arren=[], white=false )
+    def move(arr=[],arren=[], white=false, incheck = false )
         
         ind = @table.find_vertice(@pos)
+        if incheck
+        vertice = @table.vertices[ind]
+        else
         vertice = posible_moves(@table.vertices[ind],arr,arren,white)
+        end
         m = []
         vertice.neighbours.each do |element|
             if element

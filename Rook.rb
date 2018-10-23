@@ -2,23 +2,10 @@ require "./Piece"
 
 class Rook < Piece
 
-	 def posible_moves(vertice,arr,arren, white=false,king_test=false)
+	 def posible_moves(vertice,arr=[],arren=[],white=false,king_test=false)
         #pos = [X,Y]
 
-        posible_moves_add = lambda do |n,start|
-            if !king_test
-               if arr.include?(n)
-                   break
-                   elsif arren.include?(n)
-                   @table.add_edge(start, n, 1 )
-                   break
-                   else
-                   @table.add_edge(start, n, 1 )
-               end
-             else
-             @table.add_edge(start, n, 1 )
-             end
-        end 
+        
 	 	start= vertice.name
         up = false
         down = false
@@ -28,7 +15,20 @@ class Rook < Piece
         until up  do
         	if start[0] + i <=7
         		n = [start[0] + i,@pos[1]]
-        		posible_moves_add.call(n,start)
+        		if !king_test
+                  if arr.include?(n)
+                   break
+                  elsif arren.include?(n)                 
+                   @table.add_edge(start, n, 1 )
+                   
+                     lup = true
+                   break
+                   else
+                     @table.add_edge(start, n, 1 )
+                   end
+               else
+               @table.add_edge(start, n, 1 )
+               end
         	else 
             up = true
         	end 
@@ -40,7 +40,20 @@ class Rook < Piece
         until right do
         	if start[1] + i <=7
         		n = [@pos[0],start[1] + i]
-        	    posible_moves_add.call(n,start)
+        	    if !king_test
+                  if arr.include?(n)
+                   break
+                  elsif arren.include?(n)                 
+                   @table.add_edge(start, n, 1 )
+                   
+                     right = true
+                   break
+                   else
+                     @table.add_edge(start, n, 1 )
+                   end
+               else
+               @table.add_edge(start, n, 1 )
+               end
         	else 
             right = true
         	end 
@@ -52,7 +65,20 @@ class Rook < Piece
         until down  do
         	if start[0] - i >=0
         		n = [start[0] - i, @pos[1]]
-        	    posible_moves_add.call(n,start)
+        	    if !king_test
+                  if arr.include?(n)
+                   break
+                  elsif arren.include?(n)                 
+                   @table.add_edge(start, n, 1 )
+                   
+                     down = true
+                   break
+                   else
+                     @table.add_edge(start, n, 1 )
+                   end
+               else
+               @table.add_edge(start, n, 1 )
+               end
         	else 
             down = true
         	end 
@@ -64,7 +90,20 @@ class Rook < Piece
         until left do
             if start[1] - i >= 0
         		n = [@pos[0],start[1] - i]
-        	    posible_moves_add.call(n,start)
+        	    if !king_test
+                  if arr.include?(n)
+                   break
+                  elsif arren.include?(n)                 
+                   @table.add_edge(start, n, 1 )
+                   
+                     left = true
+                   break
+                   else
+                     @table.add_edge(start, n, 1 )
+                   end
+               else
+               @table.add_edge(start, n, 1 )
+               end
         	else 
             left = true
         	end 

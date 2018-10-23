@@ -5,23 +5,10 @@ class Queen < Piece
  
    
 
-	def posible_moves(vertice,arr,arren, white=false,king_test=false )
+	def posible_moves(vertice,arr=[],arren=[],white=false,king_test=false)
         #pos = [X,Y]
 
-        posible_moves_add = lambda do |n,start|
-			if !king_test
-	           if arr.include?(n)
-				   break
-				   elsif arren.include?(n)
-				   @table.add_edge(start, n, 1 )
-				   break
-				   else
-				   @table.add_edge(start, n, 1 )
-			   end
-			 else
-		     @table.add_edge(start, n, 1 )
-		     end
-	    end 
+        
          
 	 	start = vertice.name 
         rightup = false
@@ -38,7 +25,20 @@ class Queen < Piece
         	if start[0] + i <=7 && start[1] + i <=7 
         	   
         	    n = [start[0] + i,start[1] + i]
-        	    posible_moves_add.call(n,start)
+        	    if !king_test
+	           if arr.include?(n)
+				   break
+			   elsif arren.include?(n)			   	  
+				   @table.add_edge(start, n, 1 )
+				   
+                   rightup = true
+			       break
+			   else
+				   @table.add_edge(start, n, 1 )
+			   end
+			 else
+		     @table.add_edge(start, n, 1 )
+		     end
         	else 
             rightup = true
         	end 
@@ -51,7 +51,20 @@ class Queen < Piece
         until rightdown  do
         	if start[0] + i <=7 && start[1] - i >=0
         		n = [start[0] + i, start[1] - i]
-        		posible_moves_add.call(n,start)
+        		if !king_test
+	           if arr.include?(n)
+				   break
+			   elsif arren.include?(n)			   	  
+				   @table.add_edge(start, n, 1 )
+				   
+                   rightdown = true
+			       break
+			   else
+				   @table.add_edge(start, n, 1 )
+			   end
+			 else
+		     @table.add_edge(start, n, 1 )
+		     end
         	else 
             rightdown  = true
         	end 
@@ -63,7 +76,20 @@ class Queen < Piece
         until leftup  do
         		if   start[0] - i >= 0 && start[1] + i <=7 
         	    n = [start[0] - i ,start[1] + i]
-        	    posible_moves_add.call(n,start)
+        	    if !king_test
+	           if arr.include?(n)
+				   break
+			   elsif arren.include?(n)			   	  
+				   @table.add_edge(start, n, 1 )
+				   
+                   leftup = true
+			       break
+			   else
+				   @table.add_edge(start, n, 1 )
+			   end
+			 else
+		     @table.add_edge(start, n, 1 )
+		     end
 
         	else 
             leftup = true
@@ -76,7 +102,20 @@ class Queen < Piece
         until leftdown do
         	if  start[0] - i >= 0 &&  start[1] - i >= 0 
         		n = [start[0] -i  ,start[1] - i]
-        	    posible_moves_add.call(n,start)
+        	    if !king_test
+	           if arr.include?(n)
+				   break
+			   elsif arren.include?(n)			   	  
+				   @table.add_edge(start, n, 1 )
+				   
+                   leftdown = true
+			       break
+			   else
+				   @table.add_edge(start, n, 1 )
+			   end
+			 else
+		     @table.add_edge(start, n, 1 )
+		     end
         	else 
             leftdown = true
         	end 
@@ -84,22 +123,23 @@ class Queen < Piece
         end
 
         i = 1
-        until up  do
+        until right  do
         	if start[0] + i <=7
         		n = [start[0] + i,@pos[1]]
-        		posible_moves_add.call(n,start)
-        	else 
-            up = true
-        	end 
-        	i+=1
-        end
-
-        i = 1
-
-        until right do
-        	if start[1] + i <=7
-        		n = [@pos[0],start[1] + i]
-        	    posible_moves_add.call(n,start)
+        		if !king_test
+	           if arr.include?(n)
+				   break
+			   elsif arren.include?(n)			   	  
+				   @table.add_edge(start, n, 1 )
+				   
+                   right = true
+			       break
+			   else
+				   @table.add_edge(start, n, 1 )
+			   end
+			 else
+		     @table.add_edge(start, n, 1 )
+		     end
         	else 
             right = true
         	end 
@@ -108,29 +148,80 @@ class Queen < Piece
 
         i = 1
 
-        until down  do
-        	if start[0] - i >=0
-        		n = [start[0] - i, @pos[1]]
-        	    posible_moves_add.call(n,start)
+        until up do
+        	if start[1] + i <=7
+        		n = [@pos[0],start[1] + i]
+        	    if !king_test
+	           if arr.include?(n)
+				   break
+			   elsif arren.include?(n)			   	  
+				   @table.add_edge(start, n, 1 )
+				   
+                   up = true
+			       break
+			   else
+				   @table.add_edge(start, n, 1 )
+			   end
+			 else
+		     @table.add_edge(start, n, 1 )
+		     end
         	else 
-            down = true
+            up = true
         	end 
         	i+=1
         end
 
         i = 1
 
-        until left do
-        		if start[1] - i >= 0
-        		n = [@pos[0],start[1] - i]
-        	    posible_moves_add.call(n,start)
+        until left  do
+        	if start[0] - i >=0
+        		n = [start[0] - i, @pos[1]]
+        	    if !king_test
+	           if arr.include?(n)
+				   break
+			   elsif arren.include?(n)			   	  
+				   @table.add_edge(start, n, 1 )
+				   
+                   left = true
+			       break
+			   else
+				   @table.add_edge(start, n, 1 )
+			   end
+			 else
+		     @table.add_edge(start, n, 1 )
+		     end
         	else 
             left = true
         	end 
         	i+=1
         end
-       
 
+        i = 1
+
+        until down do
+        		if start[1] - i >= 0
+        		n = [@pos[0],start[1] - i]
+        	    if !king_test
+	           if arr.include?(n)
+				   break
+			   elsif arren.include?(n)			   	  
+				   @table.add_edge(start, n, 1 )
+				   
+                   down = true
+			       break
+			   else
+				   @table.add_edge(start, n, 1 )
+			   end
+			 else
+		     @table.add_edge(start, n, 1 )
+		     end
+        	else 
+            down = true
+        	end 
+        	i+=1
+        end
+       
+        
         return vertice
 	 end
 end

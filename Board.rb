@@ -5,6 +5,14 @@ require "./Bishop"
 require "./Rook"
 require "./Knight"
 
+class Blankspace
+     attr_accessor :symbol
+
+     def initialize
+      @symbol = " "
+     end
+end
+
 class Board
     attr_accessor :table, :whites, :blacks , :wpos , :bpos , :bs, :wking , :bking , :wthreat , :bhreat
 	def initialize
@@ -29,13 +37,6 @@ class Board
       put_black
 	end
 
-  class Blankspace
-     attr_accessor :symbol
-
-     def initialize
-      @symbol = " "
-     end
-  end
 
   def put_white
      i = 0

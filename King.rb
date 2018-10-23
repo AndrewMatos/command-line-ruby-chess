@@ -3,7 +3,7 @@ require "./Piece"
 class King < Piece
 
 
-	def posible_moves(vertice,arr,arren, white=false)
+	def posible_moves(vertice,arr=[],arren=[],white=false,king_test=false)
         #pos = [X,Y]
 	 	start = vertice.name 
         i = 1

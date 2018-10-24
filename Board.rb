@@ -171,8 +171,3 @@ class Board
 
 end
 
-#b=Board.new
-
-#b.put_board
-
-#p b.table[1][0].move(b.wpos)

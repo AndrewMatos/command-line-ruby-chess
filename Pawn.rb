@@ -3,7 +3,7 @@ require "./Piece"
 class Pawn < Piece
 
 	def posible_moves(vertice,arr=[],arren=[],white=false,king_test=false)
-       
+      
       if white
 	        start = vertice.name
 	        if start[1] + 1 <=7
@@ -44,7 +44,7 @@ class Pawn < Piece
 	        end
 
 	        if start[0]-1 >= 0 && start[1]- 1 >=0
-	        	n = [start[0]-1,start[1] + 1]
+	        	n = [start[0]-1,start[1] - 1]
 	        	if arren.include?(n)
 	            @table.add_edge(start, n, 1 )
 	            end

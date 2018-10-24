@@ -1,6 +1,6 @@
 require "./Piece"
 class Bishop < Piece
-	def posible_moves(vvertice,arr=[],arren=[],white=false,king_test=false)
+	def posible_moves(vertice,arr=[],arren=[],white=false,king_test=false)
         #pos = [X,Y]
 
         
@@ -115,6 +115,3 @@ class Bishop < Piece
 	 end
 end
 
-#b = Bishop.new([7,0])
-
-#b.move

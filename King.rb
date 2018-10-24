@@ -74,8 +74,3 @@ class King < Piece
 	 end
 end
 
-#k = King.new
-
-#k.move
-
-#p k.string_pos

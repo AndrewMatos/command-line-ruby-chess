@@ -71,7 +71,7 @@ class Piece
     end
 
     def pos_choice(m)
-       puts "you can move this piece to to #{m} where do you want to move?"
+       puts "you can move this piece to #{m} where do you want to move?"
        choice = gets.chomp.upcase 
         if m.include?(choice)
            choice = choice.split("")

@@ -119,6 +119,3 @@ class Rook < Piece
 
 end
 
-#r=Rook.new
-
-#r.move

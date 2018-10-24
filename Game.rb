@@ -1,11 +1,11 @@
-require "./test_board"
+require "./Board"
 
 class Game
 
 	attr_accessor :board, :wks , :bks, :win
 
 	def initialize
-		@board = Tboard.new
+		@board = Board.new
 		@wks=0
 		@bks=0
 		@win = false
@@ -83,7 +83,7 @@ class Game
               ind = element.table.find_vertice(element.pos)
             
               
-              vertice = element.posible_moves(element.table.vertices[ind],@board.bpos,@board.wpos,white,king_test)
+              vertice = element.posible_moves(element.table.vertices[ind],@board.bpos,@board.wpos,false,king_test)
               
             
               if vertice.neighbours.include?(king)                 	 
@@ -91,6 +91,7 @@ class Game
               	n = true            
                  @wks +=1                 
               end
+              element.table=element.ntable
     		end
     	else
 
@@ -98,7 +99,7 @@ class Game
     		  element.table=element.ntable
               ind = element.table.find_vertice(element.pos)
              
-              vertice = element.posible_moves(element.table.vertices[ind],@board.wpos,@board.bpos,white,king_test) 
+              vertice = element.posible_moves(element.table.vertices[ind],@board.wpos,@board.bpos,true,king_test) 
 
             
               if vertice.neighbours.include?(king)
@@ -107,6 +108,7 @@ class Game
               	 
               	  @bks +=1            
               end
+             element.table=element.ntable
     		end
     	end
     return n
@@ -192,9 +194,10 @@ class Game
 			     
 			          m = piece.table.vertices[ind2].neighbours.map do |element2|
 
-			              if element.table.vertices[ind].neighbours.include?(element2) &&  @board.wking.table.vertices[kind].neighbours.include?(element2)
-
-			              element2 = element2
+			              if element.table.vertices[ind].neighbours.include?(element2) && stops_check(element2,white)
+			              	               
+			                 element2 = element2
+			                
 			              elsif element2 == element.pos
 			               element2 = element2
 			              else
@@ -219,9 +222,11 @@ class Game
 			      
 			           m = piece.table.vertices[ind2].neighbours.map do |element2|
 
-			              if element.table.vertices[ind].neighbours.include?(element2) &&  @board.bking.table.vertices[kind].neighbours.include?(element2)
-
-			              element2 = element2
+			              if element.table.vertices[ind].neighbours.include?(element2) && stops_check(element2,white)
+			              	
+                             
+			                 element2 = element2
+			                 
 			              elsif element2 == element.pos
 			               element2 = element2
 			              else
@@ -241,6 +246,24 @@ class Game
 	      return true
 	      end
 
+    end
+
+    def stops_check(element,white)
+        n = false
+    	if white 
+    		@board.wpos.push(element)
+    		if !check(@board.wking.pos,true)
+    		n = true
+    		end
+    		@board.wpos.pop
+    	else
+    		@board.bpos.push(element)
+    		if !check(@board.bking.pos,false)
+    		n = true
+    		end
+    		@board.bpos.pop
+    	end
+        return n
     end
 
     
@@ -470,6 +493,7 @@ class Game
              n = Kinght.new(element.pos, "\u2658")
 		    end
 		    @board.put_piece(n,true)
+		    
 		else
 			index1 = ind
 	  	    index2 = @board.bpos.index(element.pos)

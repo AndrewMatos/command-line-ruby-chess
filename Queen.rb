@@ -6,9 +6,7 @@ class Queen < Piece
    
 
 	def posible_moves(vertice,arr=[],arren=[],white=false,king_test=false)
-        #pos = [X,Y]
-
-        
+        #pos = [X,Y]      
          
 	 	start = vertice.name 
         rightup = false
@@ -226,6 +224,3 @@ class Queen < Piece
 	 end
 end
 
-#q= Queen.new
-
-#q.move

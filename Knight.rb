@@ -74,7 +74,6 @@ end
 
 
 
-#k =Knight.new()
-#k.move
+
 
 

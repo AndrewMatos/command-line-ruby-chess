@@ -12,6 +12,8 @@ class King < Piece
         		n = [start[0] + i,start[1] + i]
         		if !arr.include?(n)
                 @table.add_edge(start, n, 1 )
+                elsif arren.include?(n)
+                @table.add_edge(start, n, 1 )   
                 end
         	end 
        
@@ -20,6 +22,8 @@ class King < Piece
         		n = [start[0] + i, start[1] - i]
         	    if !arr.include?(n)
                 @table.add_edge(start, n, 1 )
+                elsif arren.include?(n)
+                @table.add_edge(start, n, 1 )   
                 end
         	
         	end 
@@ -29,6 +33,8 @@ class King < Piece
         		n = [start[0] - i ,start[1] + i]
         	    if !arr.include?(n)
                 @table.add_edge(start, n, 1 )
+                elsif arren.include?(n)
+                @table.add_edge(start, n, 1 )   
                 end
           end 
     
@@ -37,6 +43,8 @@ class King < Piece
         		n = [start[0] -i  ,start[1] - i]
         	    if !arr.include?(n)
                 @table.add_edge(start, n, 1 )
+                elsif arren.include?(n)
+                @table.add_edge(start, n, 1 )   
                 end
           end 
         
@@ -45,6 +53,8 @@ class King < Piece
         		n = [start[0] + i,@pos[1]]
         		if !arr.include?(n)
                 @table.add_edge(start, n, 1 )
+                elsif arren.include?(n)
+                @table.add_edge(start, n, 1 )   
                 end
           end 
         	
@@ -53,6 +63,8 @@ class King < Piece
         		n = [@pos[0],start[1] + i]
                 if !arr.include?(n)
                 @table.add_edge(start, n, 1 )
+                elsif arren.include?(n)
+                @table.add_edge(start, n, 1 )   
                 end
         	end 
 
@@ -60,6 +72,8 @@ class King < Piece
         		n = [start[0] - i, @pos[1]]
         	    if !arr.include?(n)
                 @table.add_edge(start, n, 1 )
+                elsif arren.include?(n)
+                @table.add_edge(start, n, 1 )   
                 end
         	end 
 
@@ -67,6 +81,8 @@ class King < Piece
         		n = [@pos[0],start[1] - i]
         	    if !arr.include?(n)
                 @table.add_edge(start, n, 1 )
+                elsif arren.include?(n)
+                @table.add_edge(start, n, 1 )   
                 end
         	end 
             

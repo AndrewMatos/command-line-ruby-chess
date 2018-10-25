@@ -11,6 +11,8 @@ class Knight < Piece
             n = [start[0]+1,start[1]+2]
             if !arr.include?(n)      
             @table.add_edge(start, n, 1 )
+            elsif arren.include?(n)
+            @table.add_edge(start, n, 1 )   
             end
         
         end
@@ -19,6 +21,8 @@ class Knight < Piece
             n = [start[0]+2,start[1]+1]
             if !arr.include?(n)      
             @table.add_edge(start, n, 1 )
+            elsif arren.include?(n)
+            @table.add_edge(start, n, 1 )   
             end
         end
 
@@ -26,6 +30,8 @@ class Knight < Piece
             n = [start[0]-1,start[1]+2]
             if !arr.include?(n)      
             @table.add_edge(start, n, 1 )
+            elsif arren.include?(n)
+            @table.add_edge(start, n, 1 )   
             end
         end
          
@@ -33,6 +39,8 @@ class Knight < Piece
             n = [start[0]-2,start[1]+1]
             if !arr.include?(n)      
             @table.add_edge(start, n, 1 )
+            elsif arren.include?(n)
+            @table.add_edge(start, n, 1 )   
             end
         end
 
@@ -40,6 +48,8 @@ class Knight < Piece
             n = [start[0]-2,start[1]-1]
             if !arr.include?(n)      
             @table.add_edge(start, n, 1 )
+            elsif arren.include?(n)
+            @table.add_edge(start, n, 1 )   
             end
         end
 
@@ -47,6 +57,8 @@ class Knight < Piece
             n = [start[0]-1,start[1]-2]
             if !arr.include?(n)      
             @table.add_edge(start, n, 1 )
+            elsif arren.include?(n)
+            @table.add_edge(start, n, 1 )   
             end
         end
 
@@ -54,6 +66,8 @@ class Knight < Piece
             n = [start[0]+1,start[1]-2]
             if !arr.include?(n)      
             @table.add_edge(start, n, 1 )
+            elsif arren.include?(n)
+            @table.add_edge(start, n, 1 )   
             end
         end
 
@@ -61,6 +75,8 @@ class Knight < Piece
             n = [start[0]+2,start[1]-1]
             if !arr.include?(n)      
             @table.add_edge(start, n, 1 )
+            elsif arren.include?(n)
+            @table.add_edge(start, n, 1 )   
             end
         end
 

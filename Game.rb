@@ -1,21 +1,34 @@
 require "./Board"
+require "json"
 
 class Game
 
-	attr_accessor :board, :wks , :bks, :win
+	attr_accessor :board, :wks , :bks, :win, :exit
 
 	def initialize
 		@board = Board.new
 		@wks=0
 		@bks=0
 		@win = false
+		@exit = false
 	end
    
-    def play
-    until @win do
+    def play(loadd= false)
+    if !loadd
+    	puts " do you want to load the last saved game? write 'load' everything else to start a a new one "
+    	choice= gets.chomp.downcase
+    	if choice == "load"
+    	  @board= Board.new(true)
+    	  load_game
+    	end
+    end
+    until @win || @exit do
      
      white_play
      check_promotion(true)
+     if @win || @exit
+     break
+     end
      black_play
      check_promotion(false)
     end
@@ -29,11 +42,15 @@ class Game
      	puts "your turn WHITE player, white king is in check!!!"
      	play_in_check(true)
         else
-		   	puts "your turn WHITE player, choose wich piece to move , write the number of the piece you can move (write 'skip' to skip turn): "
+		   	puts "your turn WHITE player, choose wich piece to move , write the location of the piece you want to move  "
+		   	puts "puts write 'skip' to skip your turn or write 'exit' if you want to quit and save te game, pieces:"
 		    avaible_pieces(@board.whites,true)
 		    
 		    choice=gets.chomp.upcase 
-			   if choice != "SKIP" && choice !=""
+			   
+			   if  choice == "EXIT"
+			     exit_game
+			   elsif choice != "SKIP" && choice !=""
 			     begin
 			     move_piece(choice,true)
 			     rescue TypeError
@@ -41,7 +58,6 @@ class Game
 				 gets
 				 white_play
 			     end
-			   
 			 
 			   end
 			
@@ -54,11 +70,14 @@ class Game
          puts "Your turn BLACK player, black king is in check!!!"
          play_in_check(false)
          else
-		 puts "your turn BLACK player, choose wich piece to move , write the number of the piece you can move (write 'skip' to skip turn): "
+		 puts "your turn BLACK player, choose wich piece to move , write the location of the piece you want to move  "
+		   	puts "puts write 'skip' to skip your turn or write 'exit' if you want to quit and save te game, pieces:"
 		    avaible_pieces(@board.blacks,false)
 		    
 		    choice=gets.chomp.upcase 
-		     if choice != "SKIP" && choice !=""
+		     if  choice == "EXIT"
+			     exit_game
+			 elsif choice != "SKIP" && choice !=""
 		     	 begin
 			     move_piece(choice,false)
 			     rescue TypeError
@@ -66,6 +85,7 @@ class Game
 				 gets
 				 black_play
 			     end
+			 
 			 end
 			
 		end
@@ -484,15 +504,15 @@ class Game
 		    @board.wpos=@board.wpos[0...index2]+@board.wpos[index2+1..-1]
 		    case choice
 		    when "queen"
-		     n = Queen.new(element.pos,"\u2655")
+		     n = Queen.new(element.pos,"\u2655",true)
 		    when "rook"
-		     n = Rook.new(element.pos,"\u2656")
+		     n = Rook.new(element.pos,"\u2656",true)
 		    when "bishop"
-		     n = Bishop.new(element.pos, "\u2657")
-		    when "kinght"
-             n = Kinght.new(element.pos, "\u2658")
+		     n = Bishop.new(element.pos, "\u2657",true)
+		    when "Knight"
+             n = Knight.new(element.pos, "\u2658",true)
 		    end
-		    @board.put_piece(n,true)
+		    @board.put_piece(n)
 		    
 		else
 			index1 = ind
@@ -501,13 +521,13 @@ class Game
 	        @board.bpos=@board.bpos[0...index2]+@board.bpos[index2+1..-1]
 	        case choice
 		    when "queen"
-		     n = Queen.new(element.pos,"\u265B")
+		     n = Queen.new(element.pos,"\u265B",false)
 		    when "rook"
-		     n = Rook.new(element.pos,"\u265C")
+		     n = Rook.new(element.pos,"\u265C",false)
 		    when "bishop"
-		     n = Bishop.new(element.pos, "\u265D")
-		    when "kinght"
-             n = Kinght.new(element.pos, "\u265E")
+		     n = Bishop.new(element.pos, "\u265D",false)
+		    when "Knight"
+             n = Knight.new(element.pos, "\u265E")
 		    end
 		    @board.put_piece(n)
         end
@@ -518,7 +538,67 @@ class Game
         end
     end
 
+
+    def exit_game
+         puts "do you want to save the game 'yes' to save evetyhing else to not"
+         choice= gets.chomp.downcase
+         if choice =="yes"
+          #puts "json string:"
+          f= File.new("savedgame.txt","w")
+          f.puts @board.to_json
+         
+          f.close
+          #loadd= JSON.parse(save)         
+         end
+         @exit = true
+    end
+
+       def as_json(options={})
+        {
+            jclass: self.class.name,
+            board: @board
+        }
+       end
+
+	  def to_json(*options)
+	        as_json(*options).to_json(*options)
+	  end
+     
+      def load_game
+      	f=File.open("savedgame.txt","r")
+      	js = f.gets
+        lboard=JSON.parse(js)
+        lboard["table"].each do|element|
+        	element.each do |piece|
+	        	piecename = piece["jclass"]        	 
+	            case piecename
+	            when "Pawn"
+	            n = Pawn.new(piece["data"]["pos"],piece["data"]["symbol"],piece["data"]["color"])
+	            @board.put_piece(n)	        
+	            when "Rook"
+	            n = Rook.new(piece["data"]["pos"],piece["data"]["symbol"],piece["data"]["color"])
+	            @board.put_piece(n)	 
+	            when "Bishop"
+	            n = Bishop.new(piece["data"]["pos"],piece["data"]["symbol"],piece["data"]["color"])
+	            @board.put_piece(n)
+	            when "Knight"
+	            n = Knight.new(piece["data"]["pos"],piece["data"]["symbol"],piece["data"]["color"])
+	            @board.put_piece(n)
+	            when "Queen"
+	            n = Queen.new(piece["data"]["pos"],piece["data"]["symbol"],piece["data"]["color"])
+	            @board.put_piece(n)
+	            when "King"
+	            n = King.new(piece["data"]["pos"],piece["data"]["symbol"],piece["data"]["color"])
+	            @board.put_piece(n,true)
+	            end
+	           
+            end
+        end
+      end
+
 end
+
+
 
 g= Game.new
 

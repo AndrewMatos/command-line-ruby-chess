@@ -4,7 +4,7 @@ class Pawn < Piece
 
 	def posible_moves(vertice,arr=[],arren=[],white=false,king_test=false)
       
-      if white
+      if @color
 	        start = vertice.name
 	        if start[1] + 1 <=7
 	            n = [@pos[0],start[1] + 1]

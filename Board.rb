@@ -11,11 +11,24 @@ class Blankspace
      def initialize
       @symbol = " "
      end
+
+     def as_json(options={})
+        {
+            jclass: self.class.name,
+            data: {
+               symbol: symbol 
+            }
+        }
+    end
+
+    def to_json(*options)
+        as_json(*options).to_json(*options)
+    end
 end
 
 class Board
     attr_accessor :table, :whites, :blacks , :wpos , :bpos , :bs, :wking , :bking , :wthreat , :bhreat
-	def initialize
+	def initialize(loadgame =false)
       @table=[[],[],[],[],[],[],[],[]]
       @bs = Blankspace.new
       @table.each do |element|
@@ -24,7 +37,7 @@ class Board
       	 	element.push(@bs)
       	 	i+=1
       	 end
-  end
+      end
       @whites=[]
       @wpos =[]
       @blacks=[]
@@ -33,63 +46,66 @@ class Board
       @bking=""
       @wthreat=""
       @bhreat=""
+      if !loadgame
       put_white
       put_black
+      end
 	end
 
 
   def put_white
      i = 0
      while i<=7 do
-     n = Pawn.new([i,1],"\u2659")
-     put_piece(n,true)
+     n = Pawn.new([i,1],"\u2659",true)
+     put_piece(n)
      i+=1
      end
-     n = Rook.new([0,0],"\u2656")
+     n = Rook.new([0,0],"\u2656",true)
+     put_piece(n)
+     n = Rook.new([7,0],"\u2656",true)
+     put_piece(n)
+     n = Knight.new([1,0],"\u2658",true)
+     put_piece(n)
+     n = Knight.new([6,0],"\u2658",true)
+     put_piece(n)
+     n = Bishop.new([2,0],"\u2657",true)
+     put_piece(n)
+     n = Bishop.new([5,0],"\u2657",true)
+     put_piece(n)
+     n = Queen.new([3,0],"\u2655",true)
+     put_piece(n)
+     n = King.new([4,0],"\u2654",true)
      put_piece(n,true)
-     n = Rook.new([7,0],"\u2656")
-     put_piece(n,true)
-     n = Knight.new([1,0],"\u2658")
-     put_piece(n,true)
-     n = Knight.new([6,0],"\u2658")
-     put_piece(n,true)
-     n = Bishop.new([2,0],"\u2657")
-     put_piece(n,true)
-     n = Bishop.new([5,0],"\u2657")
-     put_piece(n,true)
-     n = Queen.new([3,0],"\u2655")
-     put_piece(n,true)
-     n = King.new([4,0],"\u2654")
-     put_piece(n,true,true)
   end
 
   def put_black
        i = 0
      while i<=7 do
-     n = Pawn.new([i,6],"\u265F")
+     n = Pawn.new([i,6],"\u265F",false)
      put_piece(n)
      i+=1
      end
-     n = Rook.new([0,7],"\u265C")
+     n = Rook.new([0,7],"\u265C",false)
      put_piece(n)
-     n = Rook.new([7,7],"\u265C")
+     n = Rook.new([7,7],"\u265C",false)
      put_piece(n)
-     n = Knight.new([1,7],"\u265E")
+     n = Knight.new([1,7],"\u265E",false)
      put_piece(n)
-     n = Knight.new([6,7],"\u265E")
+     n = Knight.new([6,7],"\u265E",false)
      put_piece(n)
-     n = Bishop.new([2,7],"\u265D")
+     n = Bishop.new([2,7],"\u265D",false)
      put_piece(n)
-     n = Bishop.new([5,7],"\u265D")
+     n = Bishop.new([5,7],"\u265D",false)
      put_piece(n)
-     n = Queen.new([3,7],"\u265B")
+     n = Queen.new([3,7],"\u265B",false)
      put_piece(n)
-     n = King.new([4,7],"\u265A")
-     put_piece(n,false,true)
+     n = King.new([4,7],"\u265A",false)
+     put_piece(n,true)
   end
 
-  def put_piece(n, white = false, king= false)
-     if white
+  def put_piece(n, king= false)
+     
+     if n.color
        @whites.push(n)
        if king
        @wking = n
@@ -168,6 +184,19 @@ class Board
 	  end
   return ""
 	end
+
+  def as_json(options={})
+        {
+            jclass: self.class.name,
+            table: @table
+        }
+  end
+
+  def to_json(*options)
+        as_json(*options).to_json(*options)
+  end
+     
+
 
 end
 

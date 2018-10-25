@@ -2,18 +2,17 @@ require "./class_Graph"
 
 class Piece 
 
-	attr_accessor :pos, :table, :symbol
+	attr_accessor :pos, :table, :symbol ,:color
 
-	def initialize(pos=[0,0],symbol ="")
+	def initialize(pos=[0,0],symbol ="",color ="")
 		#[X,Y]
         #pos = [X,Y]
         @pos=pos
         @table=ntable
         @symbol=symbol
+        @color = color
 	end
-
   
-
 
     def posible_moves(vertice,arr=[],arren=[],white=false,king_test=false)
         
@@ -176,6 +175,22 @@ class Piece
     p path
      
     end
+
+  def as_json(options={})
+        {
+            jclass: self.class.name,
+            data: {
+               pos: pos,
+               table: ntable,
+               symbol: symbol,
+               color: color
+            }
+        }
+  end
+
+  def to_json(*options)
+        as_json(*options).to_json(*options)
+  end
      
 
 end

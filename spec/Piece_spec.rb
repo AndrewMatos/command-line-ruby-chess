@@ -24,9 +24,9 @@ describe Piece do
   describe "#move" do 
   	 it "gives the player the options of movement and ask if he wants to move" do
   	 	puts " your position is #{@pi.pos} "
-  	 	expect(@pi.move.class).to eql(Array)
+  	 	expect(@pi.move).to eql(true)
   	 	puts "your position is now #{@pi.pos}" 
-  	 	expect(@pi.move.class).to eql(Array)
+  	 	expect(@pi.move).to eql(true)
   	 	puts "your position is now #{@pi.pos}"
   	 end
   end

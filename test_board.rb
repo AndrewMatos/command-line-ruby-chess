@@ -1,5 +1,7 @@
 require "./Board"
 
+#same as Board but made to test especific escenarios
+
 class Tboard < Board
 
 	 def put_white

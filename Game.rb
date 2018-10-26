@@ -1,6 +1,8 @@
 require "./Board"
 require "json"
 
+#class game that plays the game using the Board
+
 class Game
 
 	attr_accessor :board, :wks , :bks, :win, :exit
@@ -12,6 +14,8 @@ class Game
 		@win = false
 		@exit = false
 	end
+
+	# plays the game until one player wins or exit
    
     def play(loadd= false)
     if !loadd
@@ -35,6 +39,8 @@ class Game
      @board.put_board
      puts "Bye"
     end
+
+    #plays the turn of the white player
 
     def white_play
 	    @board.put_board
@@ -64,6 +70,8 @@ class Game
 		end
     end
 
+    #plays the turn of the black player
+
     def black_play
 	    @board.put_board
 	     if check(@board.bking.pos,false)
@@ -90,6 +98,8 @@ class Game
 			
 		end
     end
+
+    #uses each enemy posible moves to test if the king is in check
 
     def check(king,white = false,king_test=false)
     n = false
@@ -134,7 +144,7 @@ class Game
     return n
     end
 
-    
+    #play version if you are in check that limits the piece and moves you can do
 
     def play_in_check(white=false)
     	if white
@@ -196,10 +206,11 @@ class Game
 	         end
         else 
            checkmate
-        end
-        
+        end        
        
     end
+
+    #check with moves can stop the check 
 
     def save_king(piece, white)
        
@@ -268,6 +279,8 @@ class Game
 
     end
 
+    #uses check to know if the move stops the check for save king method
+
     def stops_check(element,white)
         n = false
     	if white 
@@ -286,7 +299,7 @@ class Game
         return n
     end
 
-    
+    #displays checkmate if a player looses
 
     def checkmate(white = false)
     	puts "CHECKMATE!"
@@ -311,6 +324,8 @@ class Game
     	end
     end
 
+    #display the pieces
+
    def avaible_pieces(pieces,white=false)
    	 str=""
    	 if white
@@ -326,6 +341,8 @@ class Game
    	 puts str + "\n"
    end
 
+   #start the movement of the piece you chose
+
    def move_piece(choice, white = false,incheck = false)
 	   	choice = [to_pos(choice[0]),choice[1].to_i]
         if @board.table[choice[0]][choice[1]].class == King
@@ -334,7 +351,8 @@ class Game
 		 pos_change(choice,white,false,incheck)
 		end
    end
-
+    
+    #changes the position of the piece you chose using the method move from the piece
    def  pos_change(choice,white,king=false,incheck=false)
          	if white
      
@@ -371,7 +389,7 @@ class Game
             end
    end
 
-
+   # changes the position of a normal piece
    def normal_move(choice,white = false)
    	  @board.table[@board.table[choice[0]][choice[1]].pos[0]][@board.table[choice[0]][choice[1]].pos[1]] = @board.table[choice[0]][choice[1]] 
       
@@ -386,7 +404,7 @@ class Game
       end
       @board.table[choice[0]][choice[1]] = @board.bs
    end
-
+   #move posible to the king
    def move_king(king,white)
    	   ind = king.table.find_vertice(king.pos)
    	   if white
@@ -433,7 +451,7 @@ class Game
 	  end
 
    end
-
+   # remove the eaten piece of the @board arrays
    def eats(eaten,white = false)
 	  if white 
 	  	index1 = @board.blacks.index(eaten)
@@ -447,7 +465,8 @@ class Game
 	    @board.wpos=@board.wpos[0...index2]+@board.wpos[index2+1..-1]
 	  end
    end
-
+   
+   #same as the used in piece, translte X from  string to an integer
    def to_pos(str)
         r= str.downcase
         case r
@@ -470,6 +489,8 @@ class Game
         end 
        return r   
     end
+
+    #check if pawn is in the enemy start 
     
     def check_promotion(white)
     	if white
@@ -490,6 +511,8 @@ class Game
     		end
     	end
     end
+
+    #changes pawn to the piece of your choice 
 
     def promotion(element, ind,white)
         array = ["queen","rook","bishop","kinght"]
@@ -538,7 +561,7 @@ class Game
         end
     end
 
-
+     # ask the player if he wants to save the game, and exits
     def exit_game
          puts "do you want to save the game 'yes' to save evetyhing else to not"
          choice= gets.chomp.downcase
@@ -563,6 +586,8 @@ class Game
 	  def to_json(*options)
 	        as_json(*options).to_json(*options)
 	  end
+
+	  #load the previous saved game
      
       def load_game
       	f=File.open("savedgame.txt","r")

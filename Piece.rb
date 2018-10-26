@@ -1,5 +1,6 @@
 require "./class_Graph"
 
+# creates a Main class Piece, to give methods and instance variables to each piece
 class Piece 
 
 	attr_accessor :pos, :table, :symbol ,:color
@@ -12,11 +13,63 @@ class Piece
         @symbol=symbol
         @color = color
 	end
-  
 
+#@table  is  a graph with all the  square of the board,   
+
+#posible moves creates  edge of your actual position with   the pieces posible moves
     def posible_moves(vertice,arr=[],arren=[],white=false,king_test=false)
-        
+      
+      if @color
+            start = vertice.name
+            if start[1] + 1 <=7
+                n = [@pos[0],start[1] + 1]
+                if !arr.include?(n) && !arren.include?(n)
+                 @table.add_edge(start, n, 1 )
+                end
+           end
+
+            if start[0]+1 <=7 && start[1]+1 <=7 
+                n = [start[0]+1,start[1] + 1]
+                if arren.include?(n)
+                @table.add_edge(start, n, 1 )
+                end
+            end
+
+            if start[0]-1 >= 0 && start[1]+1 <=7 
+                n = [start[0]-1,start[1] + 1]
+                if arren.include?(n)
+                @table.add_edge(start, n, 1 )
+                end
+            end
+      else 
+
+          start = vertice.name
+            if start[1] - 1 >=0
+                n = [@pos[0],start[1] - 1]
+                if !arr.include?(n) && !arren.include?(n)
+                 @table.add_edge(start, n, 1 )
+                end
+           end
+
+            if start[0]+1 <=7 && start[1]- 1 >=0
+                n = [start[0]+1,start[1] - 1]
+                if arren.include?(n)
+                @table.add_edge(start, n, 1 )
+                end
+            end
+
+            if start[0]-1 >= 0 && start[1]- 1 >=0
+                n = [start[0]-1,start[1] - 1]
+                if arren.include?(n)
+                @table.add_edge(start, n, 1 )
+                end
+            end
+      end 
+     
+    return vertice
     end
+
+
 
     def string_pos(pos=@pos)
         spos = pos.dup
@@ -40,6 +93,8 @@ class Piece
              end
        return spos[0]+spos[1].to_s
     end
+
+    # move ask the player wich place do you want to move
 
     def move(arr=[],arren=[], white=false, incheck = false )
         
@@ -69,6 +124,8 @@ class Piece
         end
     end
 
+    #pos_choice displays the posible moves
+
     def pos_choice(m)
        puts "you can move this piece to #{m} where do you want to move?"
        choice = gets.chomp.upcase 
@@ -80,6 +137,8 @@ class Piece
             pos_choice(m)
         end 
     end
+    
+    #converts X from string to a number
     
     def to_pos(str)
         r= str.downcase
@@ -104,6 +163,7 @@ class Piece
        return r   
     end
 
+#creates the table using the Graph class
 
     def ntable
      n =Graph.new
@@ -119,12 +179,15 @@ class Piece
     return n
     end
 
+
+    #add edges across all the board
     def connection      
          m = @table.vertices.map do |element|
           element= posible_moves(element)
         end        
     end
- 
+    
+    #uses the edges created by connection and establish the fatest route to a point using
 
     def moves_route( move, start=@pos)
 
@@ -175,6 +238,8 @@ class Piece
     p path
      
     end
+
+  # methods for easy serialization using JSON
 
   def as_json(options={})
         {

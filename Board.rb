@@ -5,6 +5,8 @@ require "./Bishop"
 require "./Rook"
 require "./Knight"
 
+#class Blank space to simulate a piece and use symbol instace variable
+
 class Blankspace
      attr_accessor :symbol
 
@@ -25,6 +27,8 @@ class Blankspace
         as_json(*options).to_json(*options)
     end
 end
+
+#class board that contains each object and position
 
 class Board
     attr_accessor :table, :whites, :blacks , :wpos , :bpos , :bs, :wking , :bking , :wthreat , :bhreat
@@ -52,6 +56,7 @@ class Board
       end
 	end
 
+# puts each of the white pieces
 
   def put_white
      i = 0
@@ -78,6 +83,8 @@ class Board
      put_piece(n,true)
   end
 
+#put each of black piece
+
   def put_black
        i = 0
      while i<=7 do
@@ -103,6 +110,8 @@ class Board
      put_piece(n,true)
   end
 
+  #takes a n object(a piece) and puts in the table, in the whites and black arrays, the positions arrays, and in king specific instance variable
+
   def put_piece(n, king= false)
      
      if n.color
@@ -122,7 +131,7 @@ class Board
   end
 
   
-
+#displays the piece in the middle of the square
 
 	def white_middle(var)
      return "║ #{var} ║"
@@ -131,7 +140,8 @@ class Board
 	def black_middle(var)
      return "┃ #{var} ┃"
 	end
-    
+  
+  # createsa row using square
     def row(arr,row ,startwhite=false)
     	wob=startwhite
     	white_top ="╔═══╗"
@@ -166,6 +176,7 @@ class Board
          puts pos
       	 end
     end
+  # puts the square and table on display
 
 	def put_board
 		#system "clear" or system "cls"
@@ -184,6 +195,8 @@ class Board
 	  end
   return ""
 	end
+
+  # methods for easy serialization using JSON
 
   def as_json(options={})
         {
